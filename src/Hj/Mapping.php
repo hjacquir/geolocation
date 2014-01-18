@@ -12,12 +12,10 @@ use \Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use \Symfony\Component\Serializer\Serializer;
 
 /**
- * Description of Mapping
+ * This class is used to convert the json response into reusable objects (deserialize)
  */
 class Mapping
 {
-    const STATUS_OK = 'OK';
-    
     const STATUS_ZERO_RESULTS = 'ZERO_RESULTS';
     
     /**
@@ -55,7 +53,7 @@ class Mapping
             
             throw new Exception('It seems that the location you requested does not exist') ;
         }
- 
+
         $result = $this->response->body->results[0]->geometry->location;
         
         return $this->serializer->deserialize(json_encode($result), '\Hj\Location', $this->format); 
@@ -71,7 +69,6 @@ class Mapping
         $status = $this->response->body->status;
         
         if (self::STATUS_ZERO_RESULTS == $status) {
-           
             $isFound = false;
         }
         
