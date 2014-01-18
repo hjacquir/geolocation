@@ -6,6 +6,8 @@
 
 namespace Hj;
 
+use \Exception;
+use \Httpful\Request;
 use \Symfony\Component\Console\Command\Command;
 use \Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputInterface;
@@ -87,12 +89,11 @@ class Console extends Command
             $country
         );
         
-        $apiResponse = new ApiResponse($url->getTheUri($paramaters));
+        $apiResponse = Request::get($url->getTheUri($paramaters))->send();
         
-        $response = $apiResponse->getResponse();
         $encoder = new JsonEncoder();
         $normalizer = new GetSetMethodNormalizer();
-        $mapping = new Mapping($response, $encoder, $normalizer);
+        $mapping = new Mapping($apiResponse, $encoder, $normalizer);
         
         /**
          * @var Location
@@ -101,7 +102,7 @@ class Console extends Command
             $location = $mapping->deserializeLatAndLng();
             $message = '<info>Latitude : ' . $location->getLat() . ' and Longitude : ' . 
                 $location->getLng() . '</info>';
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $message = '<error>' . $ex->getMessage() . '</error>';
         }
         
