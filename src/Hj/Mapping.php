@@ -68,7 +68,7 @@ class Mapping
         // return 'OK' or 'ZERO_RESULTS'
         $status = $this->response->body->status;
         
-        if (self::STATUS_ZERO_RESULTS == $status) {
+        if (self::STATUS_ZERO_RESULTS === $status) {
             $isFound = false;
         }
         
